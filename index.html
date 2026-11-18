@@ -1,224 +1,110 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Brutalist App</title>
-    <style>
-        :root {
-            --bg-color: #F4EFE6;
-            --accent-color: #E32636;
-            --black: #000000;
-            --white: #FFFFFF;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Arial Black', 'Helvetica Neue', Helvetica, sans-serif;
-            color: var(--black);
-            overflow-x: hidden;
-            user-select: none;
-        }
-
-        /* Screen Management */
-        .screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 24px;
-            width: 100vw;
-        }
-
-        .screen.active {
-            display: flex;
-            animation: slideFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        /* Typography */
-        h1 {
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.2;
-            margin-bottom: 40px;
-            letter-spacing: -0.5px;
-        }
-
-        h2 {
-            font-size: 22px;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 1.2;
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
-        }
-
-        /* UI Elements - Buttons */
-        .btn {
-            display: block;
-            width: 100%;
-            max-width: 400px;
-            background-color: var(--accent-color);
-            color: var(--white);
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-align: center;
-            padding: 18px 20px;
-            margin-bottom: 20px;
-            border: 2px solid var(--black);
-            border-radius: 0; /* Sharp square corners */
-            box-shadow: 4px 4px 0px var(--black);
-            cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
-            line-height: 1.3;
-        }
-
-        .btn.secondary {
-            background-color: var(--white);
-            color: var(--black);
-            margin-top: auto;
-        }
-
-        /* Active / Press State */
-        .btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px var(--black);
-        }
-
-        /* Animation Placeholder */
-        .animation-container {
-            width: 100%;
-            max-width: 400px;
-            height: 250px;
-            background-color: var(--white);
-            border: 2px solid var(--black);
-            box-shadow: 4px 4px 0px var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 40px;
-            font-size: 14px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: var(--black);
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Screen Transition Animation */
-        @keyframes slideFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Container specific adjustments for Screen 2 menu list */
-        .menu-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-grow: 1;
-            justify-content: center;
-        }
-        
-        .bottom-nav {
-            width: 100%;
-            max-width: 400px;
-            margin-top: 40px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Приложение к постеру</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #E8E3D9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      background-color: #F4EFE6;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.12);
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      position: relative;
+      animation: fadeSlide 0.3s ease forwards;
+    }
+    .slide.active {
+      display: block;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* Кликабельная зона поверх таблички на 1-м слайде */
+    .sign-hotspot {
+      position: absolute;
+      left: 8%;
+      bottom: 6%;
+      width: 68%;
+      height: 44%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Кнопка возврата на 2-м слайде */
+    .back-bar {
+      padding: 16px;
+      background-color: #F4EFE6;
+      border-top: 2px solid #000000;
+    }
+    .back-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #E32636;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 2px solid #000000;
+      box-shadow: 4px 4px 0px #000000;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .back-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #000000;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- SCREEN 1: Start Screen -->
-    <div id="screen-1" class="screen active">
-        <h1>ДОБРО ПОЖАЛОВАТЬ В ПРИЛОЖЕНИЕ К МОЕМУ ПОСТЕРУ</h1>
-        <button class="btn" onclick="navigateTo('screen-2')">УЗНАТЬ БОЛЬШЕ</button>
+ 
+  <div class="app-container">
+    <!-- Слайд 1: Стартовый экран -->
+    <div id="slide1" class="slide active">
+      <img src="screen1.png" alt="Добро пожаловать в приложение к постеру">
+      <button class="sign-hotspot" onclick="goToSlide('slide2')" aria-label="Узнать про неспецифические взаимодействия"></button>
     </div>
-
-    <!-- SCREEN 2: Poster Menu -->
-    <div id="screen-2" class="screen">
-        <div class="menu-container">
-            <button class="btn" onclick="navigateTo('screen-3')">УЗНАТЬ ПРО РОДСТВЕННЫЕ ПРИМЕСИ</button>
-            <button class="btn" onclick="navigateTo('screen-4')">УЗНАТЬ ПРО НЕСПЕЦИФИЧЕСКИЕ ВЗАИМОДЕЙСТВИЯ С СОРБЕНТОМ</button>
-            <button class="btn" onclick="navigateTo('screen-5')">УЗНАТЬ КАК МОЛЕКУЛЫ БЕЛКА ДВИЖУТСЯ ПО КОЛОНКЕ</button>
-        </div>
-        <div class="bottom-nav">
-            <button class="btn secondary" onclick="navigateTo('screen-1')">НАЗАД</button>
-        </div>
+ 
+    <!-- Слайд 2: Неспецифические взаимодействия -->
+    <div id="slide2" class="slide">
+      <img src="screen2.png" alt="Неспецифические взаимодействия с сорбентом">
+      <div class="back-bar">
+        <button class="back-btn" onclick="goToSlide('slide1')">← Назад на главную</button>
+      </div>
     </div>
-
-    <!-- SCREEN 3: Content Screen 1 -->
-    <div id="screen-3" class="screen">
-        <h2>УЗНАТЬ ПРО РОДСТВЕННЫЕ ПРИМЕСИ</h2>
-        <div class="animation-container">
-            Здесь будет анимация
-        </div>
-        <div class="bottom-nav">
-            <button class="btn secondary" onclick="navigateTo('screen-2')">НАЗАД</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 4: Content Screen 2 -->
-    <div id="screen-4" class="screen">
-        <h2>УЗНАТЬ ПРО НЕСПЕЦИФИЧЕСКИЕ ВЗАИМОДЕЙСТВИЯ С СОРБЕНТОМ</h2>
-        <div class="animation-container">
-            Здесь будет анимация
-        </div>
-        <div class="bottom-nav">
-            <button class="btn secondary" onclick="navigateTo('screen-2')">НАЗАД</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 5: Content Screen 3 -->
-    <div id="screen-5" class="screen">
-        <h2>УЗНАТЬ КАК МОЛЕКУЛЫ БЕЛКА ДВИЖУТСЯ ПО КОЛОНКЕ</h2>
-        <div class="animation-container">
-            Здесь будет анимация
-        </div>
-        <div class="bottom-nav">
-            <button class="btn secondary" onclick="navigateTo('screen-2')">НАЗАД</button>
-        </div>
-    </div>
-
-    <!-- SPA Logic -->
-    <script>
-        function navigateTo(targetScreenId) {
-            // Remove 'active' class from all screens
-            const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => {
-                screen.classList.remove('active');
-            });
-
-            // Trigger reflow to restart CSS animation (hack for smooth re-trigger)
-            void document.body.offsetWidth;
-
-            // Add 'active' class to the target screen
-            const targetScreen = document.getElementById(targetScreenId);
-            if (targetScreen) {
-                targetScreen.classList.add('active');
-                window.scrollTo(0, 0);
-            }
-        }
-    </script>
+  </div>
+ 
+  <script>
+    function goToSlide(slideId) {
+      document.querySelectorAll('.slide').forEach(el => el.classList.remove('active'));
+      document.getElementById(slideId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+ 
 </body>
 </html>
