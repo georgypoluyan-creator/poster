@@ -10,101 +10,162 @@
       margin: 0;
       padding: 0;
     }
+ 
     body {
-      background-color: #E8E3D9;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #EFEFEA;
       display: flex;
       justify-content: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
+ 
     .app-container {
       width: 100%;
       max-width: 480px;
       position: relative;
-      background-color: #F4EFE6;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.12);
+      background-color: #EFEFEA;
     }
+ 
     .slide {
       display: none;
       width: 100%;
       position: relative;
       animation: fadeSlide 0.3s ease forwards;
     }
+ 
     .slide.active {
       display: block;
     }
+ 
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .slide img {
+ 
+    .screen-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+ 
+    .base-img {
       width: 100%;
       height: auto;
       display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
-    /* Кликабельная зона поверх таблички на 1-м слайде */
-    .sign-hotspot {
+ 
+    /* 1. Незаметная «заплатка» из чистого фона самой картинки, перекрывающая статичные полоски */
+    .sparks-mask {
       position: absolute;
-      left: 8%;
-      bottom: 6%;
-      width: 68%;
-      height: 44%;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      -webkit-clip-path: inset(22.5% 24% 70.2% 50%);
+      clip-path: inset(22.5% 24% 70.2% 50%);
+      transform: translateX(-36%);
+    }
+ 
+    /* 2. Анимированный слой с вашими нарисованными полосками над левым верхним углом кнопки */
+    .sparks-animated {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      -webkit-clip-path: inset(22.5% 60% 70.2% 14%);
+      clip-path: inset(22.5% 60% 70.2% 14%);
+      transform-origin: 26.5% 30.2%;
+      mix-blend-mode: multiply;
+      filter: contrast(1.4) brightness(1.06);
+      animation: sparkBurst 1.35s ease-in-out infinite;
+    }
+ 
+    @keyframes sparkBurst {
+      0%, 100% {
+        transform: scale(0.84) translate(2px, 2px);
+        opacity: 0.35;
+      }
+      45% {
+        transform: scale(1.16) translate(-4px, -4px);
+        opacity: 1;
+      }
+      70% {
+        transform: scale(1.05) translate(-1px, -1px);
+        opacity: 0.9;
+      }
+    }
+ 
+    /* 3. Наклонная кликабельная зона строго поверх красной плашки на 1-м экране */
+    .red-btn-hotspot {
+      position: absolute;
+      left: 51%;
+      top: 46%;
+      width: 82%;
+      height: 12.5%;
+      transform: translate(-50%, -50%) rotate(38deg);
       background: transparent;
       border: none;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.12s ease;
     }
-    /* Кнопка возврата на 2-м слайде */
-    .back-bar {
-      padding: 16px;
-      background-color: #F4EFE6;
-      border-top: 2px solid #000000;
-    }
-    .back-btn {
-      width: 100%;
-      padding: 14px;
-      background-color: #E32636;
-      color: #FFFFFF;
-      font-size: 16px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 2px solid #000000;
-      box-shadow: 4px 4px 0px #000000;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .back-btn:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0px #000000;
+ 
+    /* Лёгкий визуальный отклик при нажатии пальцем */
+    .red-btn-hotspot:active {
+      background-color: rgba(255, 255, 255, 0.18);
     }
   </style>
 </head>
 <body>
  
   <div class="app-container">
-    <!-- Слайд 1: Стартовый экран -->
+    <!-- Экран 1: Стартовый -->
     <div id="slide1" class="slide active">
-      <img src="screen1.png" alt="Добро пожаловать в приложение к постеру">
-      <button class="sign-hotspot" onclick="goToSlide('slide2')" aria-label="Узнать про неспецифические взаимодействия"></button>
+      <div class="screen-wrapper">
+        <img src="screen1.png" alt="Добро пожаловать в приложение к постеру" class="base-img">
+        <img src="screen1.png" alt="" aria-hidden="true" class="sparks-mask">
+        <img src="screen1.png" alt="" aria-hidden="true" class="sparks-animated">
+        <button
+          class="red-btn-hotspot"
+          onclick="openSecondScreen()"
+          aria-label="Узнать про неспецифические взаимодействия"
+        ></button>
+      </div>
     </div>
  
-    <!-- Слайд 2: Неспецифические взаимодействия -->
+    <!-- Экран 2: Основной контент (без кнопки «Назад») -->
     <div id="slide2" class="slide">
-      <img src="screen2.png" alt="Неспецифические взаимодействия с сорбентом">
-      <div class="back-bar">
-        <button class="back-btn" onclick="goToSlide('slide1')">← Назад на главную</button>
-      </div>
+      <img src="screen2.png" alt="Неспецифические взаимодействия с сорбентом" class="base-img">
     </div>
   </div>
  
   <script>
-    function goToSlide(slideId) {
+    function showSlide(slideId) {
       document.querySelectorAll('.slide').forEach(el => el.classList.remove('active'));
       document.getElementById(slideId).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
+ 
+    function openSecondScreen() {
+      showSlide('slide2');
+      history.pushState({ slide: 'slide2' }, '', '#details');
+    }
+ 
+    // Если пользователь сделает системный свайп «Назад» на телефоне, вернётся на 1-й экран
+    window.addEventListener('popstate', () => {
+      showSlide('slide1');
+    });
   </script>
  
 </body>
 </html>
+ 
